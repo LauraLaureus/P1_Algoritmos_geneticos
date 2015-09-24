@@ -6,16 +6,19 @@ function genetic_algoritm(size,maxIterations,imagePath)
     x = 1:1:maxIterations+1;
     Pop = Inicializa_poblacion(size);
     
+    %Reduce image to edges
     img = imread(imagePath);
     I = im2bw(img,0.5);
     BW = edge(I,'canny'); %use edge detection (options 'sobel'(más ruidoso) 'canny'(menos ruidoso))
+    
     figure;
     imshow(BW);
     
     for i=1:maxIterations+1 %FutureDebug-hint001: remove "1"
         pop_fitness = fitness(Pop,BW); 
-        %some sort vector
-        max_fitness_per_generation(i) = pop_fitness(1)
+        sorted_pop_fitness = sort([pop_fitness' Pop]); %ordena en orden asecendente
+        max_fitness_per_generation(i) = sorted_pop_fitness(size);
+        Pop = pick_up(sorted_pop_fitness); 
     end
     
     figure;
